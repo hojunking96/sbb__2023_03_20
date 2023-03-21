@@ -1,6 +1,6 @@
 package com.mysite.sbb;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,10 +14,10 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
 
     List<Question> findBySubjectLike(String subject);
 
-    // @Modifying // 만약 아래 쿼리가 UPDATE, DELETE, INSERT 라면 이걸 붙여야 한다.
-    // nativeQuery = true 여야 MySQL 쿼리문법 사용 가능
-    @Modifying
     @Transactional
+    // @Modifying // 만약 아래 쿼리가 SELECT가 아니라면 이걸 붙여야 한다.
+    @Modifying
+    // nativeQuery = true 여야 MySQL 쿼리문법 사용 가능
     @Query(value = "ALTER TABLE question AUTO_INCREMENT = 1", nativeQuery = true)
     void clearAutoIncrement();
 }
