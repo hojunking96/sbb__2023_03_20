@@ -14,5 +14,4 @@ public interface AnswerRepository extends JpaRepository<Answer, Integer> {
     @Query(value = "ALTER TABLE answer AUTO_INCREMENT = 1", nativeQuery = true)
     void clearAutoIncrement();
 
-    List<Answer> findByQuestionId(Integer id);
 }
