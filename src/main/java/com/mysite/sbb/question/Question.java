@@ -8,11 +8,13 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.ToString;
 
 // question 테이블이 생김
 @Getter
 @Setter
 @Entity
+@ToString
 public class Question {
     @Id // PRIMARY KEY
     @GeneratedValue(strategy = GenerationType.IDENTITY) // AUTO_INCREMENT
