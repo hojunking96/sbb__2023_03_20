@@ -1,38 +1,41 @@
-<link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css">
 
-<h1>
-    <span th:text="${id}"></span>번
-    질문 상세내용
-</h1>
+<style>
+    @font-face {
+        font-family: 'GmarketSansMedium';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    }
 
-<h2 th:text="${question.subject}"></h2>
-<div th:text="${question.content}"></div>
+    html > body {
+        font-family: "GmarketSansMedium";
+        text-underline-position: under;
+    }
+</style>
 
-<!--
-${#lists.size(리스트)} => 리스트의 size() 함수와 같다고 보시면 됩니다.
+<div class="container my-3">
 
-<h5 th:text="${#lists.size(question.answerList)}"></h5>
+    <table class="table">
 
-<h5>
-    <span th:text="${#lists.size(question.answerList)}"></span>
-    개의 답변이 있습니다.
-</h5>
--->
+        <thead class="table-dark">
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성일시</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="q, loop : ${questionList}">
+            <td>
+                <a th:text="${loop.count}" th:href="@{|/question/detail/${q.id}|}"></a>
+            </td>
+            <td>
+                <a th:text="${q.subject}" th:href="@{|/question/detail/${q.id}|}"></a>
+            </td>
+            <td th:text="${#temporals.format(q.createDate, 'yy-MM-dd HH:mm')}"></td>
+        </tr>
+        </tbody>
+    </table>
 
-<h5 th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5>
-
-<form th:action="@{|/answer/create/${question.id}|}" method="POST">
-    <!-- 여러줄 입력이 가능한 input -->
-    <div>
-        <span>내용</span>
-        <br>
-        <textarea placeholder="내용" name="content" rows="15"></textarea>
-    </div>
-    <button type="submit">답변등록</button>
-</form>
-
-<div>
-    <ul>
-        <li th:each="answer : ${question.answerList}" th:text="|${answer.id}번답변 : ${answer.content}|"></li>
-    </ul>
 </div>
