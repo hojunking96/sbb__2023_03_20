@@ -4,22 +4,27 @@ import com.mysite.sbb.answer.Answer;
 import com.mysite.sbb.answer.AnswerRepository;
 import com.mysite.sbb.question.Question;
 import com.mysite.sbb.question.QuestionRepository;
+import com.mysite.sbb.question.QuestionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class SbbApplicationTests {
+	@Autowired
+	private QuestionService questionService;
 	@Autowired
 	private QuestionRepository questionRepository;
 	@Autowired
@@ -58,7 +63,6 @@ class SbbApplicationTests {
 		q2.addAnswer(a1);
 		a1.setCreateDate(LocalDateTime.now());
 		answerRepository.save(a1);
-
 	}
 
 	@Test
@@ -223,7 +227,9 @@ class SbbApplicationTests {
 		Answer a = oa.get();
 		assertEquals(2, a.getQuestion().getId());
 	}
-	@Transactional
+
+	@Transactional // 여기서의 트랜잭션의 역할 : 함수가 끝날 때까지 전화(DB와의)를 끊지 않음
+	@Rollback(false)
 	@Test
 	@DisplayName("질문에 달린 답변 찾기")
 	void t011() {
@@ -235,5 +241,11 @@ class SbbApplicationTests {
 
 		assertEquals(1, answerList.size());
 		assertEquals("네 자동으로 생성됩니다.", answerList.get(0).getContent());
+	}
+
+	@Test
+	@DisplayName("대량 테스트 데이터 만들기")
+	void t012() {
+		IntStream.rangeClosed(3, 300).forEach(no -> questionService.create("테스트 제목입니다. %d".formatted(no), "테스트 내용입니다. %d".formatted(no)));
 	}
 }
