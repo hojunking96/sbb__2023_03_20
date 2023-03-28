@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
+    @GetMapping("/login")
+    public String login() {
+        return "login_form";
+    }
 
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm) {
